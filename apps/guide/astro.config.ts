@@ -34,3 +34,48 @@ const LinkIcon = h(
     d: 'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71',
   }),
 );
+
+const createSROnlyLabel = (text: string) => {
+  const node = h('span.sr-only', `Section titled ${escape(text)}`);
+  node.properties!['is:raw'] = true;
+  return node;
+};
+
+export default defineConfig({
+  integrations: [
+    react(),
+    mdx(),
+    image({
+      serviceEntryPoint: '@astrojs/image/sharp',
+    }),
+    prefetch({
+      throttle: 3,
+    }),
+    Unocss({
+      configFile: fileURLToPath(new URL('../../unocss.config.ts', import.meta.url)),
+    }),
+    critters(),
+    compress(),
+  ],
+  markdown: {
+    remarkPlugins: [[remarkCodeHike, { autoImport: false, theme: shikiThemeDarkPlus, lineNumbers: true }]],
+    rehypePlugins: [
+      rehypeSlug,
+      [
+        rehypeAutolinkHeadings,
+        {
+          properties: {
+            class:
+              'relative inline-flex w-6 h-6 place-items-center place-content-center outline-0 text-black dark:text-white ml-2',
+          },
+          behavior: 'after',
+          group: ({ tagName }: { tagName: string }) =>
+            h('div', {
+              class: `[&>*]:inline-block [&>h1]:m-0 [&>h2]:m-0 [&>h3]:m-0 [&>h4]:m-0 level-${tagName}`,
+              tabIndex: -1,
+            }),
+        }
+      ]
+    ]
+  }
+})
