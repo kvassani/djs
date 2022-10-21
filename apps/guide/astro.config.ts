@@ -1,0 +1,16 @@
+import { fileURLToPath, URL } from 'node:url';
+import image from '@astrojs/image';
+import mdx from '@astrojs/mdx';
+import prefetch from '@astrojs/prefetch';
+import react from '@astrojs/react';
+import { remarkCodeHike } from '@code-hike/mdx';
+import { defineConfig } from 'astro/config';
+import compress from 'astro-compress';
+import critters from 'astro-critters';
+import { type Node, toString } from 'hast-util-to-string';
+import { h } from 'hastscript';
+import { escape } from 'html-escaper';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeSlug from 'rehype-slug';
+import shikiThemeDarkPlus from 'shiki/themes/dark-plus.json' assert { type: 'json' };
+import Unocss from 'unocss/astro';
